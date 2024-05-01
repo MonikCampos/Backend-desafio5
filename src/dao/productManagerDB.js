@@ -1,43 +1,21 @@
 import { productsModel } from "./models/productsModel.js ";
 
 export default class ProductManager {
-    async addProducts({
-        id,
-        title,
-        description,
-        code,
-        price,
-        status = true,
-        stock,
-        category,
-        brand,
-        thumbnails = [],
-    }) {
-        let NewProduct = {
-            title,
-            description,
-            code,
-            price,
-            status,
-            stock,
-            category,
-            brand,
-            thumbnails,
-        };
-        await productsModel.create(NewProduct);
-    }
-
+    
     async getProducts() {
         //devuelve los productos de la bd
         return await productsModel.find();
     }
 
-    async getProductsBy(filtro) {
+    async addProduct(product) {
+        return await productsModel.create(product);
+    }
+
+    async getProductsBy(filtro) { // filtro= {email:"test@test.com", edad:40}
         return await productsModel.findOne(filtro);
     }
 
     async updateProducts(id, productData) {
-        // ---> 'PRODUCTDATA' se pasa por el body de postman<---
         return await productsModel.findByIdAndUpdate(id, productData, {
             runValidators: true,
             returnDocument: "after",

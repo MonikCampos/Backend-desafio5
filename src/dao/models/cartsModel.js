@@ -1,11 +1,17 @@
-import mongoose, { SchemaTypes } from "mongoose";
+import mongoose from "mongoose";
 const cartsCollection = "carts";
+
 const cartsSchema = new mongoose.Schema({
+    id: {type: String, required: true, unique: true},
     products: [
         {
-            _id: false,
-            id: String,
-            quantity: Number,
+            id: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: "products",
+                required: true, 
+                unique: true
+            },
+            quantity: {type: Number, default: 1}
         },
     ],
 });
