@@ -1,18 +1,25 @@
 import { Router } from 'express';
-import productManager from "../dao/productManager.js";
+import ProductManager from '../dao/productManagerDB.js';
+
 export const router=Router();
 
-const Products=new productManager("./src/data/products.json");
+const Products=new ProductManager();
 
 //Ruta para visualizar todos los productos o con un límite de visualización
 router.get("/", async(req, res)=>{
-    let {limit}=req.query;
-    let product = await Products.getProducts(limit);
-    if(limit){
-        product=product.slice(0, limit);
+    try {
+        let {limit}=req.query;
+        let product = await Products.getProducts(limit);
+        if(limit){
+            product=product.slice(0, limit);
+        }
+        res.setHeader('Content-Type','application/json');
+        res.status(200).json({Products: product});
+    } catch (error) {
+        res.setHeader('Content-Type','application/json');
+        res.status(500).json({error: error.message});
     }
-    res.json({Products: product});
-})
+});
 
 //Ruta para visualizar solo uno de los productos por su id
 router.get("/:pid", async(req, res)=>{
@@ -107,3 +114,4 @@ router.delete("/:pid", async(req, res)=>{
         return res.status(400).json({error: error.message});
     }
 })
+

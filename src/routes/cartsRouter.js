@@ -1,14 +1,20 @@
 import { Router } from 'express';
-import CartManager from "../dao/cartManager.js";
+import CartManager from "../dao/cartManagerDB.js";
 
 export const router=Router();
 
 const Carts=new CartManager("./src/data/carts.json");
 
 //La ruta RAIZ GET devuelve todos los carritos
-router.get( '/', (req, res) =>{
-    const Cart=Carts.getCarts();
-    return res.json({Cart});
+router.get( '/', async(req, res) =>{
+    try {
+        const Cart=await Carts.getCarts();
+        res.setHeader('Content-Type','application/json');
+        return res.status(200).json({Cart});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({error: error.message});
+    }
 });
 
 //La ruta /:cid devuelve el contenido del carro con id :
@@ -31,9 +37,15 @@ router.get( '/:cid', async(req, res) =>{
 });
 
 //La ruta RAÍZ POST crea un nuevo carrito
-router.post('/', (req,res)=>{
-    const Cart=Carts.createCart();
-    return res.status(200).json({Cart});
+router.post('/', async (req,res)=>{
+    try {
+        const Cart=await Carts.createCart();
+        res.setHeader('Content-Type','application/json');
+        return res.status(200).json({Cart});
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({error: error.message});
+    }
 });
 
 //La Ruta /:cid/product/:pid agrega un producto al carro de compras 

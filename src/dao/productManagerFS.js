@@ -1,6 +1,6 @@
 import fs  from 'fs';
 
-class ProductManager {
+export default class ProductManager {
     #products;
     #path;
     
@@ -121,5 +121,3 @@ class ProductManager {
         return {status,resp};        
     } 
 }
-
-export default ProductManager;

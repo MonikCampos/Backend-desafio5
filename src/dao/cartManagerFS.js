@@ -1,7 +1,7 @@
 import fs  from 'fs';
-import ProductManager from './productManager.js';
+import ProductManager from './productManagerFS.js';
 
-class CartManager {
+export default class CartManager {
     #carts;
     #path;
     
@@ -105,5 +105,3 @@ class CartManager {
             throw new Error(`No se encuentra carrito con id: ${id}`);
     } 
 }
-
-export default CartManager;
