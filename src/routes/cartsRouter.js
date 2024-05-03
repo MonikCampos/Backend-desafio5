@@ -1,14 +1,14 @@
+import { isValidObjectId } from 'mongoose';
 import { Router } from 'express';
 import CartManager from "../dao/cartManagerDB.js";
 
 export const router=Router();
-
-const Carts=new CartManager("./src/data/carts.json");
+const Carts=new CartManager();
 
 //La ruta RAIZ GET devuelve todos los carritos
 router.get( '/', async(req, res) =>{
     try {
-        const Cart=await Carts.getCarts();
+        const Cart = await Carts.getCarts();
         res.setHeader('Content-Type','application/json');
         return res.status(200).json({Cart});
     } catch (error) {
@@ -19,13 +19,15 @@ router.get( '/', async(req, res) =>{
 
 //La ruta /:cid devuelve el contenido del carro con id :
 router.get( '/:cid', async(req, res) =>{
-    let {cid} = req.params;
-    cid=Number(cid) 
-    if(isNaN(cid)){
-        return res.status(400).json({error:`Ingrese un id de carrito numérico...!!!`})
-    }
+    let cid = req.params.cid;
+    
+    // validar que sea un id de mongo
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type','application/json');
+        return res.status(400).json({error:`Ingrese un id válido...!!!`})
+    };
     try {
-        const Cart=await Carts.getCartsById(Number(cid));
+        const Cart=await Carts.getCartById(cid);
         if(!Cart){
             res.status(400).json({message:`No existen carritos con id ${cid}`});
         }

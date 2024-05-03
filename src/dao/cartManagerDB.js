@@ -6,13 +6,11 @@ export default class CartManager {
     }
 
     async getCarts() {
-        const carts = await cartsModel.find();
-        return carts;
+        return await cartsModel.find();
     }
 
     async getCartById(id) {
-        const searchCart = await cartsModel.findOne({ _id: id });
-        return searchCart;
+        return await cartsModel.findById(id);
     }
 
     async addProducts(idCart, idProduct) {
@@ -33,5 +31,9 @@ export default class CartManager {
         } catch (error) {
             console.error(error);
         }
+    }
+
+    async deleteCart(cartId) {
+        return await cartsModel.deleteOne({ _id: cartId });
     }
 }

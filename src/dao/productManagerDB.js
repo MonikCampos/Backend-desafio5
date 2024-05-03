@@ -11,6 +11,10 @@ export default class ProductManager {
         return await productsModel.create(product);
     }
 
+    async getProductById(id) {
+        return await productsModel.findById(id);
+    }   
+
     async getProductsBy(filtro) { // filtro= {email:"test@test.com", edad:40}
         return await productsModel.findOne(filtro);
     }
