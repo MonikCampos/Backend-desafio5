@@ -7,18 +7,19 @@ export default class ProductManager {
         return await productsModel.find();
     }
 
-    async addProduct(product) {
-        return await productsModel.create(product);
-    }
-
     async getProductById(id) {
         return await productsModel.findById(id);
     }   
 
-    async getProductsBy(filtro) { // filtro= {email:"test@test.com", edad:40}
+    async getProductsBy(filtro) {
+        // El filtro puede ser cualquier campo = {email:"test@test.com", edad:40}
         return await productsModel.findOne(filtro);
     }
 
+    async addProduct(product) {
+        return await productsModel.create(product);
+    }
+    
     async updateProducts(id, productData) {
         return await productsModel.findByIdAndUpdate(id, productData, {
             runValidators: true,

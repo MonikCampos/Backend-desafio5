@@ -8,6 +8,7 @@ socket.on('Products', products => {
     products.forEach(element => {
         const  tr = tbody.insertRow();
         tr.innerHTML = `
+        <td>${element._id}</td>
         <td>${element.id}</td>
         <td>${element.title}</td>
         <td>${element.description}</td>
@@ -26,6 +27,7 @@ const form = document.getElementById( "productForm" );
 form.addEventListener( "submit", function ( event ) {
     event.preventDefault();
     //Captar  los datos del formulario
+    const id = document.getElementById('id').value;
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     const price = document.getElementById('price').value;
@@ -34,9 +36,10 @@ form.addEventListener( "submit", function ( event ) {
     const stock = document.getElementById('stock').value;  
     const category = document.getElementById('category').value;
     const brand = document.getElementById('brand').value;
-
+    
     //Enviar el producto a travez de web socket
     const producto = {
+        id,
         title,
         description,
         price,

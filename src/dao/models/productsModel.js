@@ -17,7 +17,13 @@ const productsSchema=new mongoose.Schema(
     {
         timestamps: true,
     }
-)
+);
+productsSchema.set('toJSON', {
+    transform: (doc, ret) => {
+        delete ret.__v;
+        return ret;
+    }
+});
 
 export const productsModel=mongoose.model(
     productsCollection,

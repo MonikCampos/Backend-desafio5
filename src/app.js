@@ -7,13 +7,13 @@ import { router as productsRouter } from "./routes/productsRouter.js"
 import { router as cartsRouter } from "./routes/cartsRouter.js";
 import { router as viewsRouter } from "./routes/viewsRouter.js";
 import __dirname from "./utils.js";
-import ProductManager from "./dao/productManagerDB.js";
-
+//import ProductManager from "./dao/productManagerDB.js";
+import { productsModel } from './dao/models/productsModel.js';
 
 const port=8080;
 const app=express();
 
-const p = new ProductManager();
+//const p = new ProductManager();
 
 //App.use para utilizar los routers
 app.use(express.json())
@@ -35,13 +35,15 @@ app.use("/api/carts", cartsRouter);
 const expressServer=app.listen(port, ()=>console.log(`Server corriendo en puerto ${port}`))
 const socketServer = new Server(expressServer);
 
-socketServer.on('connection', (socket)=>{   
-    const products = p.getProducts();    
+socketServer.on('connection', async (socket)=>{   
+    //const products = p.getProducts();    
+    const products = await productsModel.find().lean();
     socket.emit('Products', products); 
     
-    socket.on('nuevoProducto', producto =>{        
-        console.log({producto});
-        const result =  p.addProduct(producto);                  
+    socket.on('nuevoProducto', async producto =>{        
+        //console.log({producto});
+        //const result =  p.addProduct(producto);                  
+        const result = await productsModel.create(producto);
         if (result.producto)
             socket.emit('Products', result.producto);
     });

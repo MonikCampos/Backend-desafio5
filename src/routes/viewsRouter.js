@@ -1,19 +1,15 @@
 import { Router } from 'express';
-import ProductManager from '../dao/productManagerDB.js';
-export const router=Router();
-const p = new ProductManager();
+import { productsModel } from '../dao/models/productsModel.js';
 
-router.get('/', async (req,res)=>{
-    try{        
-        const products = p.getProducts();
-        res.setHeader('Content-Type','application/json');
-        res.status(200).render('home',{products});
-    }catch(error){
-        res.status(500).send(error.message);
-    }
-    //return  res.render('home',{products});
+export const router=Router();
+
+
+router.get('/', async (req,res)=>{    
+    const products = await productsModel.find().lean();
+    return res.render('home',{products});
 });
 
-router.get('/realtimeproducts',(req,res)=>{
-    return  res.render('realTimeProducts');
+router.get('/realtimeproducts',async (req,res)=>{
+    const products = await productsModel.find().lean();
+    return res.render('realTimeProducts',{products});
 });
